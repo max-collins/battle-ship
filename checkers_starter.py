@@ -4,10 +4,10 @@ class Board:
         self.width = 8
         self.height = 8
         self.data = [['O' for i in range(self.width)] for j in range(self.height)]
-        self.available_guesses = []
-        for row in range(0, 8):
-            for col in range(0, 8):
-                self.available_guesses += [(row, col)]
+        self.opp_data  = [['O' for i in range(self.width)] for j in range(self.height)]
+        self.has_hot = False #mode for searching for a shot
+        self.hot_zone = (0,0) #area to search around
+        self.v5, self.v4, self.v3, self.v33, self.v2 = True, True, True, True, True #vals are True if that ship is not sunk
     
     def __repr__(self):
         s = ''                          
@@ -62,7 +62,44 @@ class Board:
                     return False
             return True
         return False
-        
+
+    def can_place_for_opp(self,r_0,c_0,r_1,c_1, s):
+        """can_place() but for ai_just_lookin
+        """
+        if r_0 < 0 or r_0 > 8: #initial board chekcs
+            return False
+
+        if c_0 < 0 or c_1 > 8:
+            return False
+
+        if r_1 < 0 or r_1 > 8:
+            return False
+
+        if c_1 < 0 or c_1 > 8:
+            return False
+
+        if r_0 == r_1:#not diag cause rows
+
+            if abs(c_0 - c_1) != (s-1): #fits ship length
+                return False
+
+            c_lower = min(c_0,c_1)
+            c_upper = max(c_0,c_1) #range doesnt work if the lower bound is higher
+            for i in range(c_lower, c_upper): #no overlap
+                if self.opp_data[r_0][i] != 'O':
+                    return False
+            return True
+
+        if c_0 == c_1: #not diag cause cols
+            if abs(r_0 - r_1) != (s-1):#fits ship length
+                return False
+            r_lower = min(r_0,r_1)
+            r_upper = max(r_0,r_1) #range doesnt work if the lower bound is higher
+            for i in range(r_lower, r_upper): #no overlap
+                if self.opp_data[i][c_0] != 'O':
+                    return False
+            return True
+        return False
 
 
             
@@ -362,86 +399,95 @@ class Board:
         """
         if self.data[r][c] == 'S':
             self.data[r][c] = '*'
+            self.opp_data[r][c] = '*'
             return True
-        elif self.data == 'O':
+        elif self.data[r][c] == 'O':
             self.data[r][c] = 'X'
+            self.opp_data[r][c] = 'X'
         return False
     
     def prob_density(self):
-        """returns prob density of self.data by iterating ship placement across the board"""
+        """in: v5 true if destroyer isnt sunk, v4 if the four one isnt sunk, so on
+           out: returns prob density of self.data by iterating ship placement across the board
+        """
         denisty_graph = [[0 for i in range(self.width)] for j in range(self.height)]
         #destoryer
-        #with vert placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i+(5-1), j,5):
-                    for k in range(5-1):
-                        denisty_graph[i+k][j] += 1
-        #with horiz placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i, j+(5-1),5):
-                    for k in range(5-1):
-                        denisty_graph[i][j+k] += 1
+        if self.v5 == True:
+            #with vert placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i+(5-1), j,5):
+                        for k in range(5-1):
+                            denisty_graph[i+k][j] += 1
+            #with horiz placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i, j+(5-1),5):
+                        for k in range(5-1):
+                            denisty_graph[i][j+k] += 1
         
 
         #under that 
-        #with vert placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i+(4-1), j,4):
-                    for k in range(4-1):
-                        denisty_graph[i+k][j] += 1
-        #with horiz placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i, j+(4-1),4):
-                    for k in range(4-1):
-                        denisty_graph[i][j+k] += 1
+        if self.v4 == True:
+            #with vert placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place(i,j,i+(4-1), j,4):
+                        for k in range(4-1):
+                            denisty_graph[i+k][j] += 1
+            #with horiz placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i, j+(4-1),4):
+                        for k in range(4-1):
+                            denisty_graph[i][j+k] += 1
 
 
         #hell if i know
-        #with vert placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i+(3-1), j,3):
-                    for k in range(3-1):
-                        denisty_graph[i+k][j] += 1
-        #with horiz placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i, j+(3-1),3):
-                    for k in range(3-1):
-                        denisty_graph[i][j+k] += 1
+        if self.v3 == True:
+            #with vert placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i+(3-1), j,3):
+                        for k in range(3-1):
+                            denisty_graph[i+k][j] += 1
+            #with horiz placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i, j+(3-1),3):
+                        for k in range(3-1):
+                            denisty_graph[i][j+k] += 1
 
         #under that
-        #with vert placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i+(3-1), j,3):
-                    for k in range(3-1):
-                        denisty_graph[i+k][j] += 1
-        #with horiz placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i, j+(3-1),3):
-                    for k in range(3-1):
-                        denisty_graph[i][j+k] += 1
+        if self.v33 == True:
+            #with vert placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i+(3-1), j,3):
+                        for k in range(3-1):
+                            denisty_graph[i+k][j] += 1
+            #with horiz placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i, j+(3-1),3):
+                        for k in range(3-1):
+                            denisty_graph[i][j+k] += 1
 
 
         #lil baby
-        #with vert placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i+(2-1), j,2):
-                    for k in range(2-1):
-                        denisty_graph[i+k][j] += 1
-        #with horiz placement
-        for i in range(self.width): #rows
-            for j in range(self.height): #cols
-                if self.can_place(i,j,i, j+(2-1),2):
-                    for k in range(2-1):
-                        denisty_graph[i][j+k] += 1
+        if self.v2 == True:
+            #with vert placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i+(2-1), j,2):
+                        for k in range(2-1):
+                            denisty_graph[i+k][j] += 1
+            #with horiz placement
+            for i in range(self.width): #rows
+                for j in range(self.height): #cols
+                    if self.can_place_for_opp(i,j,i, j+(2-1),2):
+                        for k in range(2-1):
+                            denisty_graph[i][j+k] += 1
         return denisty_graph
 
     def ai_just_lookin(self):
@@ -451,9 +497,59 @@ class Board:
             for j in range(len(self.prob_density()[i])):
                 max_val = max(max_val, (self.prob_density()[i][j], i, j))
         return (max_val[1],max_val[2])
-
-
-
-
     
+    def ai_move(self):
+        if not self.has_hot:
+            shot = (self.ai_just_lookin()[0],self.ai_just_lookin()[1])
+            if self.take_shot(shot[0],shot[1]):
+                self.has_hot = True
+                self.hot_zone = shot
+                print('hit')
+            
+
+
+
+
+
+
+
+
+
+
+
+
+#peepin data functions
+def lol_how_fast(N):
+
+    data = []
+    for i in range(N):
+        b = Board()
+        b.ai_board()
+        count = 1
+        while True:
+            if b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1]):
+                break
+            count += 1
+        data.append(count)
+    return data
+
+def lol_how_fast_vis(N):
+
+    data = []
+    for i in range(N):
+        b = Board()
+        b.ai_board()
+
+        count = 1
+        while True:
+            shot = b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1])
+            print(b.opp_data)
+            print(shot)
+            if shot:
+                break
+            count += 1
+        data.append(count)
+    return data
+
+
 
