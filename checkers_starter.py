@@ -24,6 +24,21 @@ class Board:
             s = s + str(col) #put the column numbers underneath
         return s
 
+    def show_opp_data(self):
+        s = ''                          
+        for row in range(0, self.height): # The main board
+            
+            for col in range(0, self.width):
+                s += self.opp_data[row][col] 
+            s = s + '|' + str(row) #add row numbers
+            s += '\n'
+        s += (self.width + 1) * '-'   # Bottom of the board
+        
+        s = s + '\n'
+        for col in range(self.width):
+            s = s + str(col) #put the column numbers underneath
+        print(s)
+
     def can_place(self,r_0,c_0,r_1,c_1, s):
         """in: r_0 is start row, c_0 start column, r_1 end row, c_1 end column, s is ship length
            out: True is a boat can be placed there(no overlap and on board not diag), False else.
@@ -101,146 +116,130 @@ class Board:
             return True
         return False
 
-
-            
-
     def place_ship(self, r, c):
         """I was just too lazy to do this command a bunch"""
         self.data[r][c] = "S"
 
-
     def init_game(self):
         """initializes a board for the player to fill out"""
-        while True:
-            #destroyer
+        #destroyer
+        r_0 = int(input('start row for 5: '))
+        c_0 = int(input('start col: '))
+        r_1 = int(input('end row: '))
+        c_1 = int(input('end col: '))
+        while not self.can_place(r_0,c_0,r_1,c_1,5):
             r_0 = int(input('start row for 5: '))
             c_0 = int(input('start col: '))
             r_1 = int(input('end row: '))
             c_1 = int(input('end col: '))
-            while not self.can_place(r_0,c_0,r_1,c_1,5):
-                r_0 = int(input('start row for 5: '))
-                c_0 = int(input('start col: '))
-                r_1 = int(input('end row: '))
-                c_1 = int(input('end col: '))
-            if r_0 == r_1:
-                c_min = min(c_0,c_1)
-                c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+        if r_0 == r_1:
+            c_min = min(c_0,c_1)
+            c_max = max(c_0,c_1)
+            for i in range(c_min, c_max+1):
+                self.place_ship(r_0,i)
 
-            if c_0 == c_1:
-                r_min = min(r_0,r_1)
-                r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-            print(self)
+        if c_0 == c_1:
+            r_min = min(r_0,r_1)
+            r_max = max(r_0,r_1)
+            for i in range(r_min, r_max+1):
+                self.place_ship(i,c_0)
+        print(self)
 
-
-
-
-
-
-            #whatever is under destroyer
+        #whatever is under destroyer
+        r_0 = int(input('start row for 4: '))
+        c_0 = int(input('start col: '))
+        r_1 = int(input('end row: '))
+        c_1 = int(input('end col: '))
+        while not self.can_place(r_0,c_0,r_1,c_1,4):
             r_0 = int(input('start row for 4: '))
             c_0 = int(input('start col: '))
             r_1 = int(input('end row: '))
             c_1 = int(input('end col: '))
-            while not self.can_place(r_0,c_0,r_1,c_1,4):
-                r_0 = int(input('start row for 4: '))
-                c_0 = int(input('start col: '))
-                r_1 = int(input('end row: '))
-                c_1 = int(input('end col: '))
-            if r_0 == r_1:
-                c_min = min(c_0,c_1)
-                c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+        if r_0 == r_1:
+            c_min = min(c_0,c_1)
+            c_max = max(c_0,c_1)
+            for i in range(c_min, c_max+1):
+                self.place_ship(r_0,i)
 
-            if c_0 == c_1:
-                r_min = min(r_0,r_1)
-                r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-            print(self)
-            
+        if c_0 == c_1:
+            r_min = min(r_0,r_1)
+            r_max = max(r_0,r_1)
+            for i in range(r_min, r_max+1):
+                self.place_ship(i,c_0)
+        print(self)
 
-
-            #under that idfk
+        #under that idfk
+        r_0 = int(input('start row for 3: '))
+        c_0 = int(input('start col: '))
+        r_1 = int(input('end row: '))
+        c_1 = int(input('end col: '))
+        while not self.can_place(r_0,c_0,r_1,c_1,3):
             r_0 = int(input('start row for 3: '))
             c_0 = int(input('start col: '))
             r_1 = int(input('end row: '))
             c_1 = int(input('end col: '))
-            while not self.can_place(r_0,c_0,r_1,c_1,3):
-                r_0 = int(input('start row for 3: '))
-                c_0 = int(input('start col: '))
-                r_1 = int(input('end row: '))
-                c_1 = int(input('end col: '))
-            if r_0 == r_1:
-                c_min = min(c_0,c_1)
-                c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+        if r_0 == r_1:
+            c_min = min(c_0,c_1)
+            c_max = max(c_0,c_1)
+            for i in range(c_min, c_max+1):
+                self.place_ship(r_0,i)
 
-            if c_0 == c_1:
-                r_min = min(r_0,r_1)
-                r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-            print(self)
+        if c_0 == c_1:
+            r_min = min(r_0,r_1)
+            r_max = max(r_0,r_1)
+            for i in range(r_min, r_max+1):
+                self.place_ship(i,c_0)
+        print(self)
 
-
-
-            #happens twice
+        #happens twice
+        r_0 = int(input('start row for 3: '))
+        c_0 = int(input('start col: '))
+        r_1 = int(input('end row: '))
+        c_1 = int(input('end col: '))
+        while not self.can_place(r_0,c_0,r_1,c_1,3):
             r_0 = int(input('start row for 3: '))
             c_0 = int(input('start col: '))
             r_1 = int(input('end row: '))
             c_1 = int(input('end col: '))
-            while not self.can_place(r_0,c_0,r_1,c_1,3):
-                r_0 = int(input('start row for 3: '))
-                c_0 = int(input('start col: '))
-                r_1 = int(input('end row: '))
-                c_1 = int(input('end col: '))
-            if r_0 == r_1:
-                c_min = min(c_0,c_1)
-                c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
-            
+        if r_0 == r_1:
+            c_min = min(c_0,c_1)
+            c_max = max(c_0,c_1)
+            for i in range(c_min, c_max+1):
+                self.place_ship(r_0,i)
+        
 
-            if c_0 == c_1:
-                r_min = min(r_0,r_1)
-                r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-            print(self)
-            
+        if c_0 == c_1:
+            r_min = min(r_0,r_1)
+            r_max = max(r_0,r_1)
+            for i in range(r_min, r_max+1):
+                self.place_ship(i,c_0)
+        print(self)
 
-
-            #baby one
+        #baby one
+        r_0 = int(input('start row for 2: '))
+        c_0 = int(input('start col: '))
+        r_1 = int(input('end row: '))
+        c_1 = int(input('end col: '))
+        while not self.can_place(r_0,c_0,r_1,c_1,2):
             r_0 = int(input('start row for 2: '))
             c_0 = int(input('start col: '))
             r_1 = int(input('end row: '))
             c_1 = int(input('end col: '))
-            while not self.can_place(r_0,c_0,r_1,c_1,2):
-                r_0 = int(input('start row for 2: '))
-                c_0 = int(input('start col: '))
-                r_1 = int(input('end row: '))
-                c_1 = int(input('end col: '))
-            if r_0 == r_1:
-                c_min = min(c_0,c_1)
-                c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+        if r_0 == r_1:
+            c_min = min(c_0,c_1)
+            c_max = max(c_0,c_1)
+            for i in range(c_min, c_max+1):
+                self.place_ship(r_0,i)
 
-            if c_0 == c_1:
-                r_min = min(r_0,r_1)
-                r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-            print(self)
+        if c_0 == c_1:
+            r_min = min(r_0,r_1)
+            r_max = max(r_0,r_1)
+            for i in range(r_min, r_max+1):
+                self.place_ship(i,c_0)
+        print(self)
+
             
-
-    
+             
     def ai_board(self):
         while True:
             #destroyer
@@ -256,14 +255,18 @@ class Board:
             if r_0 == r_1:
                 c_min = min(c_0,c_1)
                 c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+                if self.can_place(r_0,c_0,r_1,c_1, 5) == True:
+                    for i in range(c_min, c_max+1):
+                    
+                        self.place_ship(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
                 r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
+                if self.can_place(r_0,c_0,r_1,c_1, 5) == True:
+                    for i in range(r_min, r_max+1):
+                    
+                        self.place_ship(i,c_0)
 
 
             #whatever is under destroyer
@@ -279,17 +282,18 @@ class Board:
             if r_0 == r_1:
                 c_min = min(c_0,c_1)
                 c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+                if self.can_place(r_0,c_0,r_1,c_1, 4) == True:
+                    for i in range(c_min, c_max+1):
+                    
+                        self.place_ship(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
                 r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-
-            
-
+                if self.can_place(r_0,c_0,r_1,c_1, 4) == True:
+                    for i in range(r_min, r_max+1):
+                    
+                        self.place_ship(i,c_0)
 
             #under that idfk
             r_0 = random.randrange(0,8)
@@ -304,24 +308,25 @@ class Board:
             if r_0 == r_1:
                 c_min = min(c_0,c_1)
                 c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+                if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
+                    for i in range(c_min, c_max+1):
+                    
+                        self.place_ship(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
                 r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-
-
-
+                if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
+                    for i in range(r_min, r_max+1):
+                    
+                        self.place_ship(i,c_0)
 
             #happens twice
             r_0 = random.randrange(0,8)
             c_0 = random.randrange(0,8)
             r_1 = random.randrange(0,8)
             c_1 = random.randrange(0,8)
-            while not self.can_place(r_0,c_0,r_1,c_1,3):
+            while not self.can_place(r_0,c_0,r_1,c_1, 3):
                 r_0 = random.randrange(0,8)
                 c_0 = random.randrange(0,8)
                 r_1 = random.randrange(0,8)
@@ -329,18 +334,17 @@ class Board:
             if r_0 == r_1:
                 c_min = min(c_0,c_1)
                 c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+                if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
+                    for i in range(c_min, c_max+1):
+                        self.place_ship(r_0,i)
             
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
                 r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
-        
-            
-
+                if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
+                    for i in range(r_min, r_max+1):
+                        self.place_ship(i,c_0)
 
             #baby one
             r_0 = random.randrange(0,8)
@@ -355,14 +359,16 @@ class Board:
             if r_0 == r_1:
                 c_min = min(c_0,c_1)
                 c_max = max(c_0,c_1)
-                for i in range(c_min, c_max+1):
-                    self.place_ship(r_0,i)
+                if self.can_place(r_0,c_0,r_1,c_1, 2) == True:
+                    for i in range(c_min, c_max+1):
+                        self.place_ship(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
                 r_max = max(r_0,r_1)
-                for i in range(r_min, r_max+1):
-                    self.place_ship(i,c_0)
+                if self.can_place(r_0,c_0,r_1,c_1, 2) == True:
+                    for i in range(r_min, r_max+1):
+                        self.place_ship(i,c_0)
             return
 
     def aiGuess(self):
@@ -505,6 +511,102 @@ class Board:
                 self.has_hot = True
                 self.hot_zone = shot
                 print('hit')
+    
+    
+    
+
+    def host_game(self):
+        """runs the game"""
+        print("Welcome to Battleship! Please place your ships.")
+        playerBoard = Board()
+        aiBoard = Board()
+        playerhits = Board()
+        print(aiBoard.ai_board())
+        playerBoard.init_game()
+        print(aiBoard)
+        print(repr(aiBoard.show_opp_data()))
+        
+        while 'S' in repr(playerBoard) and 'S' in repr(aiBoard): 
+            #user takes a shot at the AI 
+            user_shot_row = int(input("Which row would you like to target? "))
+            user_shot_col = int(input("Which column would you like to target? "))
+
+            shot = aiBoard.take_shot(user_shot_row, user_shot_col)
+            print("Your Ships")
+            print(playerBoard)
+            print(' ')
+            print('Your Targets')
+            print(aiBoard.show_opp_data())
+            if shot == True:
+                print('You got a hit!')
+            else:
+                print('You missed. Better luck next time!')
+
+            #Ai takes a shot at the player
+            ai_shot_row = playerBoard.ai_just_lookin()[0]
+            ai_shot_col = playerBoard.ai_just_lookin()[1]
+            ai_shot = playerBoard.take_shot(ai_shot_row, ai_shot_col)
+            playerhits.take_shot(ai_shot_row, ai_shot_col)
+            print("Your Ships")
+            print(playerBoard)
+            print(' ')
+            print("Your Targets")
+            print(aiBoard.show_opp_data())
+            if ai_shot == True:
+                print("You were hit at", ai_shot_row, ai_shot_col)
+            else:
+                print("Your opponent missed!")
+        if "S" not in repr(playerBoard): 
+            print("You have lost. Play again?")
+        else:
+            print("You have beaten the AI! Congrats!")
+
+    def ai_move(self):
+        if not self.has_hot:
+            shot = (self.ai_just_lookin()[0],self.ai_just_lookin()[1])
+            if self.take_shot(shot[0],shot[1]):
+                self.has_hot = True
+                self.hot_zone = shot
+                print('hit')
+        else:
+            pass
+
+
+
+#peepin data functions
+def lol_how_fast(N):
+    data = []
+    for i in range(N):
+        b = Board()
+        b.ai_board()
+        count = 1
+        while True:
+            if b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1]):
+                break
+            count += 1
+        data.append(count)
+    return data
+
+def lol_how_fast_vis(N):
+    data = []
+    for i in range(N):
+        b = Board()
+        b.ai_board()
+
+        count = 1
+        while True:
+            shot = b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1])
+            print(b.opp_data)
+            print(shot)
+            if shot:
+                break
+            count += 1
+        data.append(count)
+    return data
+
+
+    
+
             
 
 
