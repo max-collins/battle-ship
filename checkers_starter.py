@@ -116,9 +116,21 @@ class Board:
             return True
         return False
 
-    def place_ship(self, r, c):
+    def place_aircraft_carrier(self, r, c):
+        """I was just too lazy to do this command a bunch"""
+        self.data[r][c] = "A"
+    def place_battleship(self, r, c):
+        """I was just too lazy to do this command a bunch"""
+        self.data[r][c] = "B"
+    def place_sub(self, r, c):
         """I was just too lazy to do this command a bunch"""
         self.data[r][c] = "S"
+    def place_cruiser(self, r, c):
+        """I was just too lazy to do this command a bunch"""
+        self.data[r][c] = "C"
+    def place_destroyer(self, r, c):
+        """I was just too lazy to do this command a bunch"""
+        self.data[r][c] = "D"
 
     def init_game(self):
         """initializes a board for the player to fill out"""
@@ -136,13 +148,13 @@ class Board:
             c_min = min(c_0,c_1)
             c_max = max(c_0,c_1)
             for i in range(c_min, c_max+1):
-                self.place_ship(r_0,i)
+                self.place_aircraft_carrier(r_0,i)
 
         if c_0 == c_1:
             r_min = min(r_0,r_1)
             r_max = max(r_0,r_1)
             for i in range(r_min, r_max+1):
-                self.place_ship(i,c_0)
+                self.place_aircraft_carrier(i,c_0)
         print(self)
 
         #whatever is under destroyer
@@ -159,13 +171,13 @@ class Board:
             c_min = min(c_0,c_1)
             c_max = max(c_0,c_1)
             for i in range(c_min, c_max+1):
-                self.place_ship(r_0,i)
+                self.place_battleship(r_0,i)
 
         if c_0 == c_1:
             r_min = min(r_0,r_1)
             r_max = max(r_0,r_1)
             for i in range(r_min, r_max+1):
-                self.place_ship(i,c_0)
+                self.place_battleship(i,c_0)
         print(self)
 
         #under that idfk
@@ -182,13 +194,13 @@ class Board:
             c_min = min(c_0,c_1)
             c_max = max(c_0,c_1)
             for i in range(c_min, c_max+1):
-                self.place_ship(r_0,i)
+                self.place_cruiser(r_0,i)
 
         if c_0 == c_1:
             r_min = min(r_0,r_1)
             r_max = max(r_0,r_1)
             for i in range(r_min, r_max+1):
-                self.place_ship(i,c_0)
+                self.place_cruiser(i,c_0)
         print(self)
 
         #happens twice
@@ -205,14 +217,14 @@ class Board:
             c_min = min(c_0,c_1)
             c_max = max(c_0,c_1)
             for i in range(c_min, c_max+1):
-                self.place_ship(r_0,i)
+                self.place_sub(r_0,i)
         
 
         if c_0 == c_1:
             r_min = min(r_0,r_1)
             r_max = max(r_0,r_1)
             for i in range(r_min, r_max+1):
-                self.place_ship(i,c_0)
+                self.place_sub(i,c_0)
         print(self)
 
         #baby one
@@ -229,13 +241,13 @@ class Board:
             c_min = min(c_0,c_1)
             c_max = max(c_0,c_1)
             for i in range(c_min, c_max+1):
-                self.place_ship(r_0,i)
+                self.place_destroyer(r_0,i)
 
         if c_0 == c_1:
             r_min = min(r_0,r_1)
             r_max = max(r_0,r_1)
             for i in range(r_min, r_max+1):
-                self.place_ship(i,c_0)
+                self.place_destroyer(i,c_0)
         print(self)
 
             
@@ -258,7 +270,7 @@ class Board:
                 if self.can_place(r_0,c_0,r_1,c_1, 5) == True:
                     for i in range(c_min, c_max+1):
                     
-                        self.place_ship(r_0,i)
+                        self.place_aircraft_carrier(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
@@ -266,7 +278,7 @@ class Board:
                 if self.can_place(r_0,c_0,r_1,c_1, 5) == True:
                     for i in range(r_min, r_max+1):
                     
-                        self.place_ship(i,c_0)
+                        self.place_aircraft_carrier(i,c_0)
 
 
             #whatever is under destroyer
@@ -285,7 +297,7 @@ class Board:
                 if self.can_place(r_0,c_0,r_1,c_1, 4) == True:
                     for i in range(c_min, c_max+1):
                     
-                        self.place_ship(r_0,i)
+                        self.place_battleship(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
@@ -293,7 +305,7 @@ class Board:
                 if self.can_place(r_0,c_0,r_1,c_1, 4) == True:
                     for i in range(r_min, r_max+1):
                     
-                        self.place_ship(i,c_0)
+                        self.place_battleship(i,c_0)
 
             #under that idfk
             r_0 = random.randrange(0,8)
@@ -311,7 +323,7 @@ class Board:
                 if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
                     for i in range(c_min, c_max+1):
                     
-                        self.place_ship(r_0,i)
+                        self.place_cruiser(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
@@ -319,7 +331,7 @@ class Board:
                 if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
                     for i in range(r_min, r_max+1):
                     
-                        self.place_ship(i,c_0)
+                        self.place_cruiser(i,c_0)
 
             #happens twice
             r_0 = random.randrange(0,8)
@@ -336,7 +348,7 @@ class Board:
                 c_max = max(c_0,c_1)
                 if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
                     for i in range(c_min, c_max+1):
-                        self.place_ship(r_0,i)
+                        self.place_sub(r_0,i)
             
 
             if c_0 == c_1:
@@ -344,7 +356,7 @@ class Board:
                 r_max = max(r_0,r_1)
                 if self.can_place(r_0,c_0,r_1,c_1, 3) == True:
                     for i in range(r_min, r_max+1):
-                        self.place_ship(i,c_0)
+                        self.place_sub(i,c_0)
 
             #baby one
             r_0 = random.randrange(0,8)
@@ -361,14 +373,15 @@ class Board:
                 c_max = max(c_0,c_1)
                 if self.can_place(r_0,c_0,r_1,c_1, 2) == True:
                     for i in range(c_min, c_max+1):
-                        self.place_ship(r_0,i)
+                        self.place_destroyer(r_0,i)
 
             if c_0 == c_1:
                 r_min = min(r_0,r_1)
                 r_max = max(r_0,r_1)
                 if self.can_place(r_0,c_0,r_1,c_1, 2) == True:
                     for i in range(r_min, r_max+1):
-                        self.place_ship(i,c_0)
+                        self.place_destroyer(i,c_0)
+            print(self)
             return
 
     def aiGuess(self):
@@ -403,13 +416,14 @@ class Board:
         """in: r is a row c is a col
            out: mutates the board to an * if there's a hit, X otherwise, returns True if the r and c is a hit
         """
-        if self.data[r][c] == 'S':
+        if self.data[r][c] == 'S' or self.data[r][c] =='A' or self.data[r][c] =='B' or self.data[r][c] =='D' or self.data[r][c] =='C':
             self.data[r][c] = '*'
             self.opp_data[r][c] = '*'
             return True
-        elif self.data[r][c] == 'O':
+        if self.data[r][c] == 'O':
             self.data[r][c] = 'X'
             self.opp_data[r][c] = 'X'
+            return False
         return False
     
     def prob_density(self):
@@ -515,51 +529,105 @@ class Board:
     
     
 
-    def host_game(self):
-        """runs the game"""
-        print("Welcome to Battleship! Please place your ships.")
-        playerBoard = Board()
-        aiBoard = Board()
-        playerhits = Board()
-        print(aiBoard.ai_board())
-        playerBoard.init_game()
-        print(aiBoard)
-        print(repr(aiBoard.show_opp_data()))
+    def sunk_ship(self):
+        if "A" not in repr(playerBoard): 
+            print("They have sunk your aircraft carrier")
+            return True
         
-        while 'S' in repr(playerBoard) and 'S' in repr(aiBoard): 
-            #user takes a shot at the AI 
-            user_shot_row = int(input("Which row would you like to target? "))
-            user_shot_col = int(input("Which column would you like to target? "))
+        if "A" not in repr(aiBoard):
+            print("You have sunk their aircraft carrier")
+            return True
 
-            shot = aiBoard.take_shot(user_shot_row, user_shot_col)
-            print("Your Ships")
-            print(playerBoard)
-            print(' ')
-            print('Your Targets')
-            print(aiBoard.show_opp_data())
-            if shot == True:
-                print('You got a hit!')
-            else:
-                print('You missed. Better luck next time!')
+        if "B" not in repr(playerBoard): 
+            print("They have sunk your battleship")
+            return True
 
-            #Ai takes a shot at the player
-            ai_shot_row = playerBoard.ai_just_lookin()[0]
-            ai_shot_col = playerBoard.ai_just_lookin()[1]
-            ai_shot = playerBoard.take_shot(ai_shot_row, ai_shot_col)
-            playerhits.take_shot(ai_shot_row, ai_shot_col)
-            print("Your Ships")
-            print(playerBoard)
-            print(' ')
-            print("Your Targets")
-            print(aiBoard.show_opp_data())
-            if ai_shot == True:
-                print("You were hit at", ai_shot_row, ai_shot_col)
-            else:
-                print("Your opponent missed!")
+        if "B" not in repr(aiBoard):
+            print("You have sunk their battleship")
+            return True
+
+        if "C" not in repr(playerBoard): 
+            print("They have sunk your cruiser")
+            return True
+        
+        if "C" not in repr(aiBoard):
+            print("You have sunk their cruiser")
+            return True
+
         if "S" not in repr(playerBoard): 
-            print("You have lost. Play again?")
+            print("They have sunk your submarine")
+            return True
+        
+        if "S" not in repr(aiBoard):
+            print("You have sunk their submarine")
+            return True
+
+        if "D" not in repr(playerBoard): 
+            print("They have sunk your destroyer")
+            return True
+            
+        if "D" not in repr(aiBoard):
+            print("You have sunk their destroyer")
+            return True
+    
+
+def host_game():
+    """runs the game"""
+    print("Welcome to Battleship! Please place your ships.")
+    playerBoard = Board()
+    aiBoard = Board()
+    playerhits = Board()
+    aiBoard.ai_board()
+    playerBoard.init_game()
+    print(aiBoard)
+    print('Your Targets')
+    print(aiBoard.show_opp_data())
+        
+    while True: 
+        #user takes a shot at the AI 
+        user_shot_row = int(input("Which row would you like to target? "))
+        user_shot_col = int(input("Which column would you like to target? "))
+
+        shot = aiBoard.take_shot(user_shot_row, user_shot_col)
+        #print("Your Ships")
+        #print(playerBoard)
+        print(' ')
+        
+        #Ai takes a shot at the player
+        ai_shot_row = playerBoard.ai_just_lookin()[0]
+        ai_shot_col = playerBoard.ai_just_lookin()[1]
+        ai_shot = playerBoard.take_shot(ai_shot_row, ai_shot_col)
+        playerhits.take_shot(ai_shot_row, ai_shot_col)
+        print(' ')
+        print("Your Ships")
+        print(playerBoard)
+        if ai_shot == True:
+            print("You were hit at", ai_shot_row, ai_shot_col)
         else:
-            print("You have beaten the AI! Congrats!")
+            print("Your opponent missed!")
+        if playerBoard.sunk_ship() == True:
+            print(playerBoard.sunk_ship())
+
+        print(' ')
+        print('Your Targets')
+        print(aiBoard.show_opp_data())
+        #print("Your Targets")
+        #print(aiBoard.show_opp_data())
+        if shot == True:
+            print('You got a hit!')
+            print(' ')
+        else:
+            print('You missed. Better luck next time!')
+        if aiBoard.sunk_ship() == True:
+            print(aiBoard.sunk_ship())
+
+        if "B" and "A" and "S" and "C" and "D" not in repr(playerBoard): 
+            print("They have sunk all of your ships. You have lost. Play again?")
+            return
+        
+        elif "B" and "A" and "S" and "C" and "D" not in repr(aiBoard):
+            print("You have sunk all of their ships. Congratulations! Play again?")
+            return
 
     def ai_move(self):
         if not self.has_hot:
