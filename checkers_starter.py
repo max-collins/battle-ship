@@ -436,7 +436,6 @@ class Board:
         if self.data[r][c] == 'S' or self.data[r][c] =='A' or self.data[r][c] =='B' or self.data[r][c] =='D' or self.data[r][c] =='C':
             self.data[r][c] = '*'
             self.opp_data[r][c] = '*'
-            self.successfulHits += [(r, c)]
             return True
         if self.data[r][c] == 'O':
             self.data[r][c] = 'X'
@@ -544,47 +543,26 @@ class Board:
                 self.hot_zone = shot
                 print('hit')
     
-    def player_sunk_ship(self):      
-        if "A" not in self.data:
-            print("You have sunk their aircraft carrier")
-            return True
-
-        if "B" not in self.data:
-            print("You have sunk their battleship")
-            return True
-        
-        if "C" not in self.data:
-            print("You have sunk their cruiser")
-            return True
-        
-        if "S" not in self.data:
-            print("You have sunk their submarine")
-            return True
+    def sunk_ship(self):      
+        if "A" not in repr(self.data):
+            self.v5 = False
+            print("Aircraft carrier sunk.")
             
-        if "D" not in self.data:
-            print("You have sunk their destroyer")
-            return True
-
-    def ai_sunk_ship(self):
-        if "A" not in self.data: 
-            print("They have sunk your aircraft carrier")
-            return True
-
-        if "B" not in self.data: 
-            print("They have sunk your battleship")
-            return True
-
-        if "C" not in self.data: 
-            print("They have sunk your cruiser")
-            return True
-
-        if "S" not in self.data: 
-            print("They have sunk your submarine")
-            return True
-
-        if "D" not in self.data: 
-            print("They have sunk your destroyer")
-            return True
+        if "B" not in repr(self.data):
+            self.v4 = False
+            print("Battleship sunk.")
+        
+        if "C" not in repr(self.data):
+            self.v3 = False
+            print("Cruiser sunk.")
+        
+        if "S" not in repr(self.data):
+            self.v33 = False
+            print("Submarine sunk.")
+            
+        if "D" not in repr(self.data):
+            self.v2 = False
+            print("Destroyer sunk.")
 
 def host_game():
     """runs the game"""
@@ -598,14 +576,12 @@ def host_game():
     print('Your Targets')
     print(aiBoard.show_opp_data())
         
-    while 'S' in repr(playerBoard) and 'S' in repr(aiBoard): 
+    while True: 
         #user takes a shot at the AI 
         user_shot_row = int(input("Which row would you like to target? "))
         user_shot_col = int(input("Which column would you like to target? "))
 
         shot = aiBoard.take_shot(user_shot_row, user_shot_col)
-        #print("Your Ships")
-        #print(playerBoard)
         print(' ')
         aiGuess = playerBoard.aiGuess()
         #Ai takes a shot at the player
@@ -620,8 +596,7 @@ def host_game():
             print("You were hit at", ai_shot_row, ai_shot_col)
         else:
             print("Your opponent missed!")
-
-        print(playerBoard.ai_sunk_ship())
+        playerBoard.sunk_ship()
 
         print(' ')
         print('Your Targets')
@@ -632,43 +607,43 @@ def host_game():
             print(' ')
         else:
             print('You missed. Better luck next time!')
-        print(aiBoard.player_sunk_ship())
+        aiBoard.sunk_ship()
 
-        if "B" and "A" and "S" and "C" and "D" not in repr(playerBoard): 
+        if playerBoard.v5 == False and playerBoard.v4 ==  False and playerBoard.v3 == False and playerBoard.v33 == False and playerBoard.v2 == False:
             print("They have sunk all of your ships. You have lost. Play again?")
             return
         
-        elif "B" and "A" and "S" and "C" and "D" not in repr(aiBoard):
+        if aiBoard.v5 == False and aiBoard.v4 ==  False and aiBoard.v3 == False and aiBoard.v33 == False and aiBoard.v2 == False:
             print("You have sunk all of their ships. Congratulations! Play again?")
             return  
-    
-            
+   
+        
 
-        def ai_move(self):
-            if not self.has_hot:
-                shot = (self.ai_just_lookin()[0],self.ai_just_lookin()[1])
-                if self.take_shot(shot[0],shot[1]):
-                    self.has_hot = True
-                    self.hot_zone = shot
-                    print('hit')
-            else:
-                pass
+    def ai_move(self):
+        if not self.has_hot:
+            shot = (self.ai_just_lookin()[0],self.ai_just_lookin()[1])
+            if self.take_shot(shot[0],shot[1]):
+                self.has_hot = True
+                self.hot_zone = shot
+                print('hit')
+        else:
+            pass
 
 
 
-    #peepin data functions
-    def lol_how_fast(N):
-        data = []
-        for i in range(N):
-            b = Board()
-            b.ai_board()
-            count = 1
-            while True:
-                if b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1]):
-                    break
-                count += 1
-            data.append(count)
-        return data
+#peepin data functions
+def lol_how_fast(N):
+    data = []
+    for i in range(N):
+        b = Board()
+        b.ai_board()
+        count = 1
+        while True:
+            if b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1]):
+                break
+            count += 1
+        data.append(count)
+    return data
 
 def lol_how_fast_vis(N):
     data = []
