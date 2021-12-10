@@ -140,11 +140,24 @@ class Board:
 
     def init_game(self):
         """initializes a board for the player to fill out"""
+        print(self)
         #destroyer
-        r_0 = int(input('start row for 5: '))
-        c_0 = int(input('start col: '))
-        r_1 = int(input('end row: '))
-        c_1 = int(input('end col: '))
+        try:
+            r_0 = int(input('start row for 5: '))
+        except:
+            r_0 = 20
+        try:
+            c_0 = int(input('start col: '))
+        except:
+            c_0 = 20
+        try:
+            r_1 = int(input('end row: '))
+        except:
+            r_1 = 20
+        try:
+            c_1 = int(input('end col: '))
+        except:
+            c_1 = 20
         while not self.can_place(r_0,c_0,r_1,c_1,5):
             r_0 = int(input('start row for 5: '))
             c_0 = int(input('start col: '))
@@ -164,10 +177,22 @@ class Board:
         print(self)
 
         #whatever is under destroyer
-        r_0 = int(input('start row for 4: '))
-        c_0 = int(input('start col: '))
-        r_1 = int(input('end row: '))
-        c_1 = int(input('end col: '))
+        try:
+            r_0 = int(input('start row for 4: '))
+        except:
+            r_0 = 20
+        try:
+            c_0 = int(input('start col: '))
+        except:
+            c_0 = 20
+        try:
+            r_1 = int(input('end row: '))
+        except:
+            r_1 = 20
+        try:
+            c_1 = int(input('end col: '))
+        except:
+            c_1 = 20
         while not self.can_place(r_0,c_0,r_1,c_1,4):
             r_0 = int(input('start row for 4: '))
             c_0 = int(input('start col: '))
@@ -186,11 +211,23 @@ class Board:
                 self.place_battleship(i,c_0)
         print(self)
 
-        #under that idfk
-        r_0 = int(input('start row for 3: '))
-        c_0 = int(input('start col: '))
-        r_1 = int(input('end row: '))
-        c_1 = int(input('end col: '))
+        #under that idk
+        try:
+            r_0 = int(input('start row for 5: '))
+        except:
+            r_0 = 20
+        try:
+            c_0 = int(input('start col: '))
+        except:
+            c_0 = 20
+        try:
+            r_1 = int(input('end row: '))
+        except:
+            r_1 = 20
+        try:
+            c_1 = int(input('end col: '))
+        except:
+            c_1 = 20
         while not self.can_place(r_0,c_0,r_1,c_1,3):
             r_0 = int(input('start row for 3: '))
             c_0 = int(input('start col: '))
@@ -210,10 +247,22 @@ class Board:
         print(self)
 
         #happens twice
-        r_0 = int(input('start row for 3: '))
-        c_0 = int(input('start col: '))
-        r_1 = int(input('end row: '))
-        c_1 = int(input('end col: '))
+        try:
+            r_0 = int(input('start row for 5: '))
+        except:
+            r_0 = 20
+        try:
+            c_0 = int(input('start col: '))
+        except:
+            c_0 = 20
+        try:
+            r_1 = int(input('end row: '))
+        except:
+            r_1 = 20
+        try:
+            c_1 = int(input('end col: '))
+        except:
+            c_1 = 20
         while not self.can_place(r_0,c_0,r_1,c_1,3):
             r_0 = int(input('start row for 3: '))
             c_0 = int(input('start col: '))
@@ -234,10 +283,22 @@ class Board:
         print(self)
 
         #baby one
-        r_0 = int(input('start row for 2: '))
-        c_0 = int(input('start col: '))
-        r_1 = int(input('end row: '))
-        c_1 = int(input('end col: '))
+        try:
+            r_0 = int(input('start row for 5: '))
+        except:
+            r_0 = 20
+        try:
+            c_0 = int(input('start col: '))
+        except:
+            c_0 = 20
+        try:
+            r_1 = int(input('end row: '))
+        except:
+            r_1 = 20
+        try:
+            c_1 = int(input('end col: '))
+        except:
+            c_1 = 20
         while not self.can_place(r_0,c_0,r_1,c_1,2):
             r_0 = int(input('start row for 2: '))
             c_0 = int(input('start col: '))
@@ -436,13 +497,14 @@ class Board:
         if self.data[r][c] == 'S' or self.data[r][c] =='A' or self.data[r][c] =='B' or self.data[r][c] =='D' or self.data[r][c] =='C':
             self.data[r][c] = '*'
             self.opp_data[r][c] = '*'
+            self.successfulHits += [(r, c)]
             return True
         if self.data[r][c] == 'O':
             self.data[r][c] = 'X'
             self.opp_data[r][c] = 'X'
             return False
         return False
-    
+        
     def prob_density(self):
         """in: v5 true if destroyer isnt sunk, v4 if the four one isnt sunk, so on
            out: returns prob density of self.data by iterating ship placement across the board
@@ -572,14 +634,25 @@ def host_game():
     playerhits = Board()
     aiBoard.ai_board()
     playerBoard.init_game()
-    print(aiBoard)
     print('Your Targets')
-    print(aiBoard.show_opp_data())
+    aiBoard.show_opp_data()
         
     while True: 
         #user takes a shot at the AI 
-        user_shot_row = int(input("Which row would you like to target? "))
-        user_shot_col = int(input("Which column would you like to target? "))
+        while True:
+            try:
+                user_shot_row = int(input("Which row would you like to target? "))
+            except:
+                user_shot_row = 20
+            try:
+                user_shot_col = int(input("Which column would you like to target? "))
+            except:
+                user_shot_col = 20
+
+            if (0 <= user_shot_row <=7) and (0 <= user_shot_col <=7):
+                break
+            else:
+                print("those aren't valid inputs")
 
         shot = aiBoard.take_shot(user_shot_row, user_shot_col)
         print(' ')
@@ -600,7 +673,7 @@ def host_game():
 
         print(' ')
         print('Your Targets')
-        print(aiBoard.show_opp_data())
+        aiBoard.show_opp_data()
 
         if shot == True:
             print('You got a hit!')
@@ -616,48 +689,5 @@ def host_game():
         if aiBoard.v5 == False and aiBoard.v4 ==  False and aiBoard.v3 == False and aiBoard.v33 == False and aiBoard.v2 == False:
             print("You have sunk all of their ships. Congratulations! Play again?")
             return  
-   
-        
 
-    def ai_move(self):
-        if not self.has_hot:
-            shot = (self.ai_just_lookin()[0],self.ai_just_lookin()[1])
-            if self.take_shot(shot[0],shot[1]):
-                self.has_hot = True
-                self.hot_zone = shot
-                print('hit')
-        else:
-            pass
-
-
-
-#peepin data functions
-def lol_how_fast(N):
-    data = []
-    for i in range(N):
-        b = Board()
-        b.ai_board()
-        count = 1
-        while True:
-            if b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1]):
-                break
-            count += 1
-        data.append(count)
-    return data
-
-def lol_how_fast_vis(N):
-    data = []
-    for i in range(N):
-        b = Board()
-        b.ai_board()
-
-        count = 1
-        while True:
-            shot = b.take_shot(b.ai_just_lookin()[0], b.ai_just_lookin()[1])
-            print(b.opp_data)
-            print(shot)
-            if shot:
-                break
-            count += 1
-        data.append(count)
-    return data
+print('Hello! Welcome to Battleship. To begin a game against the Ai enter host_game()')
