@@ -1,4 +1,5 @@
 import random
+import time
 class Board:
     def __init__(self):
         self.width = 8
@@ -14,6 +15,8 @@ class Board:
                 self.available_guesses += [(row, col)]
         self.successfulHits = []
         self.available_adv_moves = []
+        self.player_wins = 0
+        self.ai_wins = 0
     
     def __repr__(self):
         s = ''                          
@@ -31,6 +34,7 @@ class Board:
         return s
 
     def show_opp_data(self):
+        """prints the opponent's board with the places that you have hit/missed"""
         s = ''                          
         for row in range(0, self.height): # The main board
             
@@ -123,19 +127,24 @@ class Board:
         return False
 
     def place_aircraft_carrier(self, r, c):
-        """I was just too lazy to do this command a bunch"""
+        """I was just too lazy to do this command a bunch
+        it places the ship for the AC"""
         self.data[r][c] = "A"
     def place_battleship(self, r, c):
-        """I was just too lazy to do this command a bunch"""
+        """I was just too lazy to do this command a bunch
+        places the battleship"""
         self.data[r][c] = "B"
     def place_sub(self, r, c):
-        """I was just too lazy to do this command a bunch"""
+        """I was just too lazy to do this command a bunch
+        places the sub"""
         self.data[r][c] = "S"
     def place_cruiser(self, r, c):
-        """I was just too lazy to do this command a bunch"""
+        """I was just too lazy to do this command a bunch
+        places cruiser"""
         self.data[r][c] = "C"
     def place_destroyer(self, r, c):
-        """I was just too lazy to do this command a bunch"""
+        """I was just too lazy to do this command a bunch
+        places destroyer"""
         self.data[r][c] = "D"
 
     def init_game(self):
@@ -213,7 +222,7 @@ class Board:
 
         #under that idk
         try:
-            r_0 = int(input('start row for 5: '))
+            r_0 = int(input('start row for 3: '))
         except:
             r_0 = 20
         try:
@@ -248,7 +257,7 @@ class Board:
 
         #happens twice
         try:
-            r_0 = int(input('start row for 5: '))
+            r_0 = int(input('start row for 3: '))
         except:
             r_0 = 20
         try:
@@ -284,7 +293,7 @@ class Board:
 
         #baby one
         try:
-            r_0 = int(input('start row for 5: '))
+            r_0 = int(input('start row for 2: '))
         except:
             r_0 = 20
         try:
@@ -605,7 +614,8 @@ class Board:
                 self.hot_zone = shot
                 print('hit')
     
-    def sunk_ship(self):      
+    def sunk_ship(self):  
+        """checks if each ship is sunk or not and tells the player"""    
         if "A" not in repr(self.data):
             self.v5 = False
             print("Aircraft carrier sunk.")
@@ -626,68 +636,158 @@ class Board:
             self.v2 = False
             print("Destroyer sunk.")
 
-def host_game():
-    """runs the game"""
-    print("Welcome to Battleship! Please place your ships.")
-    playerBoard = Board()
-    aiBoard = Board()
-    playerhits = Board()
-    aiBoard.ai_board()
-    playerBoard.init_game()
-    print('Your Targets')
-    aiBoard.show_opp_data()
-        
-    while True: 
-        #user takes a shot at the AI 
-        while True:
-            try:
-                user_shot_row = int(input("Which row would you like to target? "))
-            except:
-                user_shot_row = 20
-            try:
-                user_shot_col = int(input("Which column would you like to target? "))
-            except:
-                user_shot_col = 20
-
-            if (0 <= user_shot_row <=7) and (0 <= user_shot_col <=7):
-                break
-            else:
-                print("those aren't valid inputs")
-
-        shot = aiBoard.take_shot(user_shot_row, user_shot_col)
-        print(' ')
-        aiGuess = playerBoard.aiGuess()
-        #Ai takes a shot at the player
-        ai_shot_row = aiGuess[0]
-        ai_shot_col = aiGuess[1]
-        ai_shot = playerBoard.take_shot(ai_shot_row, ai_shot_col)
-        playerhits.take_shot(ai_shot_row, ai_shot_col)
-        print(' ')
-        print("Your Ships")
-        print(playerBoard)
-        if ai_shot == True:
-            print("You were hit at", ai_shot_row, ai_shot_col)
-        else:
-            print("Your opponent missed!")
-        playerBoard.sunk_ship()
-
-        print(' ')
+    def host_game(self):
+        """runs the game"""
+        print("Welcome to Battleship! Please place your ships.")
+        playerBoard = Board()
+        aiBoard = Board()
+        playerhits = Board()
+        aiBoard.ai_board()
+        playerBoard.init_game()
         print('Your Targets')
         aiBoard.show_opp_data()
+            
+        while True: 
+            #user takes a shot at the AI 
+            while True:
+                try:
+                    user_shot_row = int(input("Which row would you like to target? "))
+                except:
+                    user_shot_row = 20
+                try:
+                    user_shot_col = int(input("Which column would you like to target? "))
+                except:
+                    user_shot_col = 20
 
-        if shot == True:
-            print('You got a hit!')
+                if (0 <= user_shot_row <=7) and (0 <= user_shot_col <=7):
+                    break
+                else:
+                    print("those aren't valid inputs")
+
+            shot = aiBoard.take_shot(user_shot_row, user_shot_col)
             print(' ')
-        else:
-            print('You missed. Better luck next time!')
-        aiBoard.sunk_ship()
+            aiGuess = playerBoard.aiGuess()
+            #Ai takes a shot at the player
+            ai_shot_row = aiGuess[0]
+            ai_shot_col = aiGuess[1]
+            ai_shot = playerBoard.take_shot(ai_shot_row, ai_shot_col)
+            playerhits.take_shot(ai_shot_row, ai_shot_col)
+            print(' ')
+            print("Your Ships")
+            print(playerBoard)
+            if ai_shot == True:
+                print("You were hit at", ai_shot_row, ai_shot_col)
+            else:
+                print("Your opponent missed!")
+            playerBoard.sunk_ship()
 
-        if playerBoard.v5 == False and playerBoard.v4 ==  False and playerBoard.v3 == False and playerBoard.v33 == False and playerBoard.v2 == False:
-            print("They have sunk all of your ships. You have lost. Play again?")
-            return
-        
-        if aiBoard.v5 == False and aiBoard.v4 ==  False and aiBoard.v3 == False and aiBoard.v33 == False and aiBoard.v2 == False:
-            print("You have sunk all of their ships. Congratulations! Play again?")
-            return  
+            print(' ')
+            print('Your Targets')
+            aiBoard.show_opp_data()
 
-print('Hello! Welcome to Battleship. To begin a game against the Ai enter host_game()')
+            if shot == True:
+                print('You got a hit!')
+                print(' ')
+            else:
+                print('You missed. Better luck next time!')
+            aiBoard.sunk_ship()
+
+            if playerBoard.v5 == False and playerBoard.v4 ==  False and playerBoard.v3 == False and playerBoard.v33 == False and playerBoard.v2 == False:
+                print("They have sunk all of your ships. You have lost. Play again?")
+                self.ai_wins += 1
+                return
+            
+            if aiBoard.v5 == False and aiBoard.v4 ==  False and aiBoard.v3 == False and aiBoard.v33 == False and aiBoard.v2 == False:
+                print("You have sunk all of their ships. Congratulations! Play again?")
+                self.player_wins += 1
+                return  
+    def ai_vs_ai(self):
+        """plays a game between two ais rewarding wins to the player if ai1 wins."""
+        ai1Board = Board()
+        ai2Board = Board()
+        ai1Board.ai_board()
+        ai2Board.ai_board()
+        while True:
+            ai1Guess = ai2Board.aiGuess() 
+            ai1_shot_row = ai1Guess[0]
+            ai1_shot_col = ai1Guess[1]
+            ai1_shot = ai2Board.take_shot(ai1_shot_row, ai1_shot_col)
+            print('ai1 guesses:', ai1Guess)
+            time.sleep(.5)
+
+            ai2Guess = ai1Board.aiGuess() 
+            ai2_shot_row = ai2Guess[0]
+            ai2_shot_col = ai2Guess[1]
+            ai2_shot = ai1Board.take_shot(ai2_shot_row, ai2_shot_col)
+            print('ai2 guesses:', ai2Guess)
+            time.sleep(.5)
+
+            print('this leaves ai1 board as:')
+            print(ai1Board)
+            print(' ')
+            print('and ai2:')
+            print(ai2Board)
+            
+            ai1Board.sunk_ship()
+            ai2Board.sunk_ship()
+
+            if ai1Board.v5 == False and ai1Board.v4 ==  False and ai1Board.v3 == False and ai1Board.v33 == False and ai1Board.v2 == False:
+                print("You have sunk all of their ships. Congratulations! Play again?")
+                self.ai_wins += 1
+                return
+            
+            if ai2Board.v5 == False and ai2Board.v4 ==  False and ai2Board.v3 == False and ai2Board.v33 == False and ai2Board.v2 == False:
+                print("You have sunk all of their ships. Congratulations! Play again?")
+                self.player_wins += 1
+                return  
+
+    def save_files(self,filename):
+        f = open(filename, 'w')
+        print(self.player_wins, file = f)
+        print(self.ai_wins, file = f)
+        f.close()
+        print(filename, 'saved.')
+
+    def load_game(self, filename):
+        f = open(filename, 'r')
+        self.player_wins = int(f.readline())
+        self.ai_wins = int(f.readline())
+        f.close()
+        print(filename,'loaded.')
+
+
+
+
+
+
+def menu():
+    """starts the menu"""
+    b = Board()
+    while True:
+        print('Hello. Welcome to Battleship, please select:')
+        print('(1) Play a new game')
+        print('(2) See current score')
+        print('(3) Load a past session')
+        print('(4) Save current session')
+        print("(5) Have two ai's battle it out, you'll receive a win if ai one wins")
+        while True:
+            try:
+                choice = int(input('selection: '))
+                break
+            except:   
+                print('not a valid selection')
+        if choice == 1:
+            b.host_game()
+
+        elif choice == 2:
+            print('The current score is, you:',b.player_wins,'computer:',b.ai_wins)
+        elif choice == 3:
+            file = input('What was the filename? ')
+            b.load_game(file)
+        elif choice == 4:
+            file = input('What will you name the file? ')
+            b.save_files(file)
+        elif choice == 5:
+            b.ai_vs_ai()
+        print()
+menu()
